@@ -1,7 +1,5 @@
 console.log('start'); 
 
-// Göra korten klickbara
-// Få korten att vända vid klick
 // Begränsa att man bara kan vända två kort åt gången
 // Funktion för att jämföra de två kort som vändes
 // If-else sats, om de två korten är lika ska de ej vändas tillbaka och om de är olika ska de   båda vändas tillbaka
@@ -11,11 +9,11 @@ console.log('start');
 // 'null' är efter HTMLElement, eftersom querySelectorn returnerar null om den inte hittar något element i '.memory-cards'
 let cardContainer: HTMLElement | null = document.querySelector('.memory-cards');
 let memoryCard: NodeListOf<HTMLElement> = document.querySelectorAll('.memory-card');
+let cards: NodeListOf<Element> = document.querySelectorAll('.memory-card');
+// 'Array.from(cards)' konverterar NodeList i memoryCard till en array med alla kort inuti.
+let cardArray: Element[] = Array.from(cards);
 
 function shuffleCards(): void {
-    // 'Array.from(cards)' konverterar NodeList i memoryCard till en array med alla kort inuti.
-    let cards: NodeListOf<Element> = document.querySelectorAll('.memory-card');
-    let cardArray: Element[] = Array.from(cards);
 
     // Loopar igenom arrayen från slutet till början och blandar korten enligt Fisher-Yates shuffle metoden.
     // Alltså för varje loop tas ett slumpat index mellan 0 och det nuvarande, sedan byts elementet vid det slumpade indexet ut med elementet vid det nyvarnade indexet.
@@ -32,4 +30,14 @@ function shuffleCards(): void {
         });
     }
 }
+
+function cardBtn(): void {
+    cardArray.forEach(card => {
+        card.addEventListener('click', () => {
+            console.log('click');
+            card.classList.add('flip');
+        })
+    })
+}
 shuffleCards();
+cardBtn();
