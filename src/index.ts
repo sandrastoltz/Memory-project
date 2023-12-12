@@ -1,17 +1,18 @@
 console.log('start'); 
 
-// Begränsa att man bara kan vända två kort åt gången
-// Funktion för att jämföra de två kort som vändes
-// If-else sats, om de två korten är lika ska de ej vändas tillbaka och om de är olika ska de   båda vändas tillbaka
 // När alla kort är vända ska pop-up fönstret visas 'you won'
 // Göra x-knappen klickbar och resetta spelet, alltså vända tillbaka alla kort och slumpa ut dom på nytt
 
 // 'null' är efter HTMLElement, eftersom querySelectorn returnerar null om den inte hittar något element i '.memory-cards'
 let cardContainer: HTMLElement | null = document.querySelector('.memory-cards');
+
 let memoryCard: NodeListOf<HTMLElement> = document.querySelectorAll('.memory-card');
 let cards: NodeListOf<Element> = document.querySelectorAll('.memory-card');
+
 // 'Array.from(cards)' konverterar NodeList i memoryCard till en array med alla kort inuti.
 let cardArray: Element[] = Array.from(cards);
+
+let countCardArray: any = [];
 
 function shuffleCards(): void {
 
@@ -31,13 +32,41 @@ function shuffleCards(): void {
     }
 }
 
-function cardBtn(): void {
+// Gör korten klickbara, vid varje klick vänds kortet så länge inte två kort redan är vända.
+function cardFlip(): void {
     cardArray.forEach(card => {
         card.addEventListener('click', () => {
-            console.log('click');
-            card.classList.add('flip');
+
+            if (countCardArray.length < 2) {
+                countCardArray.push(card);
+                card.classList.add('flip');
+                console.log(countCardArray);
+                
+                compareCards();
+            }
         })
     })
 }
+
+function compareCards(): void {
+    if (countCardArray.length === 2) {
+
+        if (countCardArray[0].dataset.card === countCardArray[1].dataset.card) {
+            console.log('korten är lika');
+            countCardArray = [];
+
+        // Med setTimeout() går det 1.5s (1500 millisekunder) och sedan tas 'flip' klassen bort från båda korten och countCardArray nollställs.
+        } else {
+            console.log('korten är ej lika');
+            setTimeout(() => {
+                countCardArray[0].classList.remove('flip');
+                countCardArray[1].classList.remove('flip');
+                countCardArray = [];
+            }, 1500);
+        }
+    } 
+}
+
 shuffleCards();
-cardBtn();
+cardFlip();
+compareCards();
