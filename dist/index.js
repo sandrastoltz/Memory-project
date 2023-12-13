@@ -39,15 +39,14 @@ function cardFlip() {
         });
     });
 }
+// Funktion för att jämföra de två kort som vänts om de är lika eller ej.
 function compareCards() {
     if (countCardArray.length === 2) {
         if (countCardArray[0].dataset.card === countCardArray[1].dataset.card) {
-            console.log('korten är lika');
             countCardArray = [];
             // Med setTimeout() går det 1s (1000 millisekunder) och sedan tas 'flip' klassen bort från båda korten och countCardArray nollställs.
         }
         else {
-            console.log('korten är ej lika');
             setTimeout(() => {
                 countCardArray[0].classList.remove('flip');
                 countCardArray[1].classList.remove('flip');
@@ -57,11 +56,13 @@ function compareCards() {
         }
     }
 }
+// Pop-upp ruta med 'You won!'.
 function checkAllCardsFlipped() {
     if (flippedCards === 16) {
         youWon.classList.add('show');
     }
 }
+// X-knappen för att starta om spelet.
 function resetGameBtn() {
     xBtn.addEventListener('click', () => {
         youWon.classList.remove('show');
@@ -71,6 +72,7 @@ function resetGameBtn() {
         shuffleCards();
     });
 }
+// Funktion för att vända alla kort när spelet startas om.
 function flipAllCards() {
     allCardsArray.forEach((element) => {
         setTimeout(() => {
