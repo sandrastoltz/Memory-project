@@ -1,19 +1,14 @@
-console.log('start'); 
-
-// När alla kort är vända ska pop-up fönstret visas 'you won'
-// Göra x-knappen klickbar och resetta spelet, alltså vända tillbaka alla kort och slumpa ut dom på nytt
-
 // 'null' är efter HTMLElement, eftersom querySelectorn returnerar null om den inte hittar något element i '.memory-cards'
 let cardContainer: HTMLElement | null = document.querySelector('.memory-cards');
 let memoryCard: NodeListOf<HTMLElement> = document.querySelectorAll('.memory-card');
 let cards: NodeListOf<Element> = document.querySelectorAll('.memory-card');
 let youWon: Element = document.querySelector('.overlay');
-let countCardArray: any[] = [];
+let xBtn: Element = document.querySelector('.close');
+let countCardArray: HTMLElement[] = [];
+let allCardsArray: Element[] = [];
 let flippedCards: number = 0;
-
 // 'Array.from(cards)' konverterar NodeList i memoryCard till en array med alla kort inuti.
 let cardArray: Element[] = Array.from(cards);
-
 
 function shuffleCards(): void {
 
@@ -39,7 +34,8 @@ function cardFlip(): void {
         card.addEventListener('click', () => {
 
             if (countCardArray.length < 2) {
-                countCardArray.push(card);
+                countCardArray.push(card as HTMLElement);
+                allCardsArray.push(card)
                 card.classList.add('flip');
                 flippedCards++;
                 
@@ -57,7 +53,7 @@ function compareCards(): void {
             console.log('korten är lika');
             countCardArray = [];
 
-        // Med setTimeout() går det 1.5s (1500 millisekunder) och sedan tas 'flip' klassen bort från båda korten och countCardArray nollställs.
+        // Med setTimeout() går det 1s (1000 millisekunder) och sedan tas 'flip' klassen bort från båda korten och countCardArray nollställs.
         } else {
             console.log('korten är ej lika');
             setTimeout(() => {
@@ -65,7 +61,7 @@ function compareCards(): void {
                 countCardArray[1].classList.remove('flip');
                 countCardArray = [];
                 flippedCards -= 2;
-            }, 1500);
+            }, 1000);
         }
     } 
 }
@@ -76,7 +72,28 @@ function checkAllCardsFlipped(): void {
     }
 }
 
+function resetGameBtn(): void {
+    xBtn.addEventListener('click', () => {
+        youWon.classList.remove('show');
+        flippedCards = 0;
+        countCardArray = [];
+        flipAllCards();
+        shuffleCards();
+    })
+}
+
+function flipAllCards(): void {
+    allCardsArray.forEach((element) => {
+        setTimeout(() => {
+            element.classList.remove('flip');
+        }, 1000);
+    });
+    allCardsArray = [];
+}
+
 shuffleCards();
 cardFlip();
 compareCards();
 checkAllCardsFlipped();
+resetGameBtn();
+flipAllCards();
