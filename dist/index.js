@@ -5,9 +5,11 @@ console.log('start');
 let cardContainer = document.querySelector('.memory-cards');
 let memoryCard = document.querySelectorAll('.memory-card');
 let cards = document.querySelectorAll('.memory-card');
+let youWon = document.querySelector('.overlay');
+let countCardArray = [];
+let flippedCards = 0;
 // 'Array.from(cards)' konverterar NodeList i memoryCard till en array med alla kort inuti.
 let cardArray = Array.from(cards);
-let countCardArray = [];
 function shuffleCards() {
     // Loopar igenom arrayen från slutet till början och blandar korten enligt Fisher-Yates shuffle metoden.
     // Alltså för varje loop tas ett slumpat index mellan 0 och det nuvarande, sedan byts elementet vid det slumpade indexet ut med elementet vid det nyvarnade indexet.
@@ -30,8 +32,9 @@ function cardFlip() {
             if (countCardArray.length < 2) {
                 countCardArray.push(card);
                 card.classList.add('flip');
-                console.log(countCardArray);
+                flippedCards++;
                 compareCards();
+                checkAllCardsFlipped();
             }
         });
     });
@@ -49,10 +52,17 @@ function compareCards() {
                 countCardArray[0].classList.remove('flip');
                 countCardArray[1].classList.remove('flip');
                 countCardArray = [];
+                flippedCards -= 2;
             }, 1500);
         }
+    }
+}
+function checkAllCardsFlipped() {
+    if (flippedCards === 16) {
+        youWon.classList.add('show');
     }
 }
 shuffleCards();
 cardFlip();
 compareCards();
+checkAllCardsFlipped();

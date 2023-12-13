@@ -5,14 +5,15 @@ console.log('start');
 
 // 'null' är efter HTMLElement, eftersom querySelectorn returnerar null om den inte hittar något element i '.memory-cards'
 let cardContainer: HTMLElement | null = document.querySelector('.memory-cards');
-
 let memoryCard: NodeListOf<HTMLElement> = document.querySelectorAll('.memory-card');
 let cards: NodeListOf<Element> = document.querySelectorAll('.memory-card');
+let youWon: Element = document.querySelector('.overlay');
+let countCardArray: any[] = [];
+let flippedCards: number = 0;
 
 // 'Array.from(cards)' konverterar NodeList i memoryCard till en array med alla kort inuti.
 let cardArray: Element[] = Array.from(cards);
 
-let countCardArray: any = [];
 
 function shuffleCards(): void {
 
@@ -40,9 +41,10 @@ function cardFlip(): void {
             if (countCardArray.length < 2) {
                 countCardArray.push(card);
                 card.classList.add('flip');
-                console.log(countCardArray);
+                flippedCards++;
                 
                 compareCards();
+                checkAllCardsFlipped();
             }
         })
     })
@@ -62,11 +64,19 @@ function compareCards(): void {
                 countCardArray[0].classList.remove('flip');
                 countCardArray[1].classList.remove('flip');
                 countCardArray = [];
+                flippedCards -= 2;
             }, 1500);
         }
     } 
 }
 
+function checkAllCardsFlipped(): void {
+    if (flippedCards === 16) {
+        youWon.classList.add('show');
+    }
+}
+
 shuffleCards();
 cardFlip();
 compareCards();
+checkAllCardsFlipped();
