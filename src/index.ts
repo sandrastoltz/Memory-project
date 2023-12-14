@@ -92,7 +92,6 @@ function flipAllCards(): void {
     });
     allCardsArray = [];
 }
-
 shuffleCards();
 cardFlip();
 compareCards();
